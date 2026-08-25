@@ -1,0 +1,27 @@
+title: Lateral Movement via PsExec
+id: 5f4e3d2c-1b0a-4c9d-8e7f-6a5b4c3d2e1f
+status: experimental
+description: Detects execution of PsExec or its service artifact (PSEXESVC), commonly used by attackers for lateral movement and remote command execution.
+author: Ahmed Mahmoud
+date: 2026/08/25
+references:
+    - https://attack.mitre.org/techniques/T1021/002/
+    - https://attack.mitre.org/techniques/T1570/
+tags:
+    - attack.lateral_movement
+    - attack.execution
+    - attack.t1021.002
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection:
+        Image|endswith:
+            - '\PsExec.exe'
+            - '\PsExec64.exe'
+        ServiceName|contains: 'PSEXESVC'
+    condition: selection
+falsepositives:
+    - Legitimate administrative use of PsExec for remote management
+    - Approved IT automation scripts
+level: high
