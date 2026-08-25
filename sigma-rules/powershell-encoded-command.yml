@@ -1,0 +1,29 @@
+title: Suspicious PowerShell Encoded Command Execution
+id: 9d2e5f1a-6c4b-4a7d-8e3f-2b1c9a8d7e6f
+status: experimental
+description: Detects execution of PowerShell with an encoded command (-EncodedCommand / -enc), a common technique used to obfuscate malicious scripts and evade detection.
+author: Ahmed Mahmoud
+date: 2026/08/25
+references:
+    - https://attack.mitre.org/techniques/T1027/
+    - https://attack.mitre.org/techniques/T1059/001/
+tags:
+    - attack.defense_evasion
+    - attack.execution
+    - attack.t1027
+    - attack.t1059.001
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection:
+        Image|endswith: '\powershell.exe'
+        CommandLine|contains:
+            - '-enc'
+            - '-EncodedCommand'
+            - '-e '
+    condition: selection
+falsepositives:
+    - Legitimate administrative scripts using encoded commands
+    - Software deployment tools that use PowerShell encoding
+level: high
